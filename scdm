@@ -1,0 +1,51 @@
+#!/bin/sh
+
+NAME=$(basename $0)
+VERSION=v1.0
+
+
+if [ "$1" ]; then
+	test -r $1 && source $1 || shift
+fi
+if [ ! "$1" ]; then
+	test -r $HOME/.scdmrc && source $HOME/.scdmrc || \
+		test -r /etc/scdmrc && source /etc/scdmrc || \
+		{ echo "ERROR: no config file!"; exit 1; }
+fi
+
+SESSIONS[${#SESSIONS[@]}]="Exit:C:true"
+SESS_NUM=${#SESSIONS[@]}
+
+for i in $(seq 0 $[$SESS_NUM-1]); do
+	SESS_NAMES[$i]=${SESSIONS[$i]%%:*}
+done
+
+
+echo -e "\n$NAME $VERSION\n--------------------------------------------------------------------------------\nSelect a session:\n"
+select session in "${SESS_NAMES[@]}"; do
+	if [ -z "$session" -o $REPLY -gt $SESS_NUM ] 2> /dev/null || [ $? = 2 ]; then
+		echo -e "\nYou must specify a number between 1 and $SESS_NUM!\n" >&2
+	else
+		break
+	fi
+done
+unset session
+
+SESS_STR=${SESSIONS[$[REPLY-1]]}
+
+declare -A SESSION
+SESSION[name]=${SESS_STR%%:*}
+
+SESSION[type]=${SESS_STR#*:}
+SESSION[type]=${SESSION[type]%:*}
+
+SESSION[cmd]=${SESS_STR##*:}
+
+#echo -e "\nStarting ${SESSION[name]}..."
+export SCDM_SPAWN=$$
+clear
+if [ "${SESSION[type]/X/x}" = x ]; then
+	exec startx ${SESSION[cmd]} -- "${XSERVER_ARGS[@]}"
+else
+	exec ${SESSION[cmd]}
+fi

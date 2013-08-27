@@ -1,0 +1,19 @@
+#!/bin/sh
+
+
+SESSIONS=(
+	'XMonad:X:/etc/X11/start-session.sh xmonad'
+	'dwm:X:/etc/X11/start-session.sh dwm'
+	'i3:X:/etc/X11/start-session.sh i3wm'
+	'wmii:X:/etc/X11/start-session.sh wmii'
+	'Fluxbox:X:/etc/X11/start-session.sh fluxbox'
+	'TMux:C:/usr/bin/tmux'
+	'Screen:C:/usr/bin/screen'
+	'Console:C:/bin/bash --login'
+	'Poweroff:C:sudo shutdown -hP now'
+	'Reboot:C:sudo shutdown -r now'
+	'Suspend to RAM:C:sudo pm-suspend'
+	'Hibernate (Suspend to disk):C:sudo pm-hibernate'
+	)
+
+XSERVER_ARGS=(-nolisten tcp)
