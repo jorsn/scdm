@@ -5,6 +5,6 @@ if [[ "$EUID" != 0 ]]; then
 		[[ -n "$SCDM_SPAWN" ]] && return
 		# Avoid executing cdm(1) when X11 has already been started.
 		#[[ -z "$DISPLAY$SSH_TTY$(pgrep xinit)" ]] && exec cdm
-		[[ -z "$SSH_TTY" ]] && exec /home/johannes/bin/scdm
+		[[ -z "$SSH_TTY" ]] && exec scdm
 	fi
 fi
