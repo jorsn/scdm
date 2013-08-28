@@ -7,7 +7,14 @@ TTY=$(tty)
 TTY=${TTY/*tty/vt}
 
 if [ "$1" ]; then
-	test -r $1 && source $1 || shift
+	if [ "$1" = xlaunch ]; then
+		command=$2
+		{ test -r $HOME/.xprofile && source $HOME/.xprofile; } || \
+			{ test -r /etc/xprofile && source /etc/xprofile; }
+		exec $command
+	else
+		test -r $1 && source $1 || shift
+	fi
 fi
 if [ ! "$1" ]; then
 	{ test -r $HOME/.scdmrc && source $HOME/.scdmrc; } || \
@@ -47,10 +54,7 @@ SESSION[cmd]=${SESS_STR##*:}
 export SCDM_SPAWN=$$
 clear
 if [ "${SESSION[type]/X/x}" = x ]; then
-	command=${SESSION[cmd]} # possibly needed by xprofile
-	{ test -r $HOME/.xprofile && source $HOME/.xprofile; } || \
-		{ test -r /etc/xprofile && source /etc/xprofile; }
-	exec startx $command -- "${XSERVER_ARGS[@]}" $TTY > /dev/null 2>&1
+	exec startx $PWD/$0 xlaunch ${SESSION[cmd]} -- "${XSERVER_ARGS[@]}" $TTY > /dev/null 2>&1
 else
 	exec ${SESSION[cmd]}
 fi
