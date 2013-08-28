@@ -10,8 +10,8 @@ if [ "$1" ]; then
 	test -r $1 && source $1 || shift
 fi
 if [ ! "$1" ]; then
-	test -r $HOME/.scdmrc && source $HOME/.scdmrc || \
-		test -r /etc/scdmrc && source /etc/scdmrc || \
+	{ test -r $HOME/.scdmrc && source $HOME/.scdmrc; } || \
+		{ test -r /etc/scdmrc && source /etc/scdmrc; } || \
 		{ echo "ERROR: no config file!"; exit 1; }
 fi
 
