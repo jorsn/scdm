@@ -2,11 +2,11 @@
 
 
 SESSIONS=(
-	'XMonad:X:/etc/X11/start-session.sh xmonad'
-	'dwm:X:/etc/X11/start-session.sh dwm'
-	'i3:X:/etc/X11/start-session.sh i3wm'
-	'wmii:X:/etc/X11/start-session.sh wmii'
-	'Fluxbox:X:/etc/X11/start-session.sh fluxbox'
+	'XMonad:X:/etc/X11/Sessions/xmonad'
+	'dwm:X:/etc/X11/Sessions/dwm'
+	'i3:X:/etc/X11/Sessions/i3wm'
+	'wmii:X:/etc/X11/Sessions/wmii'
+	'Fluxbox:X:/etc/X11/Sessions/fluxbox'
 	'TMux:C:/usr/bin/tmux'
 	'Screen:C:/usr/bin/screen'
 	'Console:C:/bin/bash --login'
