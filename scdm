@@ -3,6 +3,8 @@
 NAME=$(basename $0)
 VERSION=v1.0
 
+TTY=$(tty)
+TTY=${TTY/*tty/vt}
 
 if [ "$1" ]; then
 	test -r $1 && source $1 || shift
@@ -45,7 +47,7 @@ SESSION[cmd]=${SESS_STR##*:}
 export SCDM_SPAWN=$$
 clear
 if [ "${SESSION[type]/X/x}" = x ]; then
-	exec startx ${SESSION[cmd]} -- "${XSERVER_ARGS[@]}"
+	exec startx ${SESSION[cmd]} -- "${XSERVER_ARGS[@]}" $TTY > /dev/null 2>&1
 else
 	exec ${SESSION[cmd]}
 fi
