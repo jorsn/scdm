@@ -10,9 +10,11 @@ if [ "$1" ]; then
 	if [ "$1" = xlaunch ]; then
 		command=$2
 		cd $HOME
-		{ test -r $HOME/.xprofile && source $HOME/.xprofile; } || \
+		{ test -r ./.xprofile && source ./.xprofile; } || \
 			{ test -r /etc/xprofile && source /etc/xprofile; }
-		exec $command
+		$command
+		source $HOME/.xlogout
+		exit
 	else
 		test -r $1 && source $1 || shift
 	fi
