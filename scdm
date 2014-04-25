@@ -13,7 +13,9 @@ if [ "$1" ]; then
 		{ test -r ./.xprofile && source ./.xprofile; } || \
 			{ test -r /etc/xprofile && source /etc/xprofile; }
 		$command
-		source $HOME/.xlogout
+		cd $HOME
+		{ test -r ./.xlogout && source ./.xlogout; } || \
+			{ test -r /etc/xlogout && source /etc/xlogout; }
 		exit
 	else
 		test -r $1 && source $1 || shift
