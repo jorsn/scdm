@@ -23,6 +23,12 @@ uninstall:
 	rm -f $(bindir)/scdm
 	rm -rf $(docdir)
 	rm -f $(mandir)/scdm.1
+	@echo ''
+	################################################################################
+	# Your configuration in $(etcdir)/scdmrc was not uninstalled.
+	# Ich you want it removed, please do that manually.
+	################################################################################
+	@echo ''
 
 clean: scdm.1
 	rm -f scdm.1
