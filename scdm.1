@@ -1,0 +1,58 @@
+.TH "scdm" "1" "2015\-06\-10" "scdm v1.1.1" "General Commands Manual"
+.SH NAME
+.PP
+scdm \- simple console display manager
+.SH SYNOPSIS
+.PP
+scdm [\f[I]rcfile\f[]]
+.SH DESCRIPTION
+.PP
+\f[B]scdm\f[] is a simple console display manager a bit like
+CDM (https://github.com/ghost1227/cdm) but simpler: It has no ConsoleKit
+support and no dialog interface.
+It can be used instead of DM\[aq]s like xdm, kdm etc.
+scdm is automatically launched if you login in a getty by its start
+script in /etc/profile.d, displays a list of sessions in a bash select
+loop and starts the specified session.
+.SH FILES
+.PP
+\f[I]rcfile\f[]
+.PD 0
+.P
+.PD
+\f[I]~/.scdmrc\f[]
+.PD 0
+.P
+.PD
+\f[I]/etc/scdmrc\f[]
+.PP
+\ \ \ \ \ \ Configuration files.
+Evaluated in this order.
+.PP
+\f[I]/etc/profile.d/scdm.sh\f[]
+.PP
+\ \ \ \ \ \ Launcher script.
+.PP
+\f[I]~/.xprofile\f[]
+.PD 0
+.P
+.PD
+\f[I]/etc/xprofile\f[]
+.PD 0
+.P
+.PD
+\f[I]~/.xlogout\f[]
+.PD 0
+.P
+.PD
+\f[I]/etc/xlogout\f[]
+.PP
+\ \ \ \ \ \ Like \f[I]~/.profile\f[] or \f[I]~/.bash_logout\f[], only
+for X sessions.
+.SH BUGS
+.PP
+If you encounter any or would like additional features, please send a
+mail to Johannes Rosenberger <jo.rosenberger@gmx-topmail.de>
+.SH AUTHORS
+Copyright (c) 2015 Johannes Rosenberger <jo.rosenberger@gmx-topmail.de>.
+This program is licensed under a BSD style license.

@@ -28,7 +28,7 @@ etc.) or copy the file to `/etc/profile.d/scdm.sh`.
 Copyright
 -----------
 
-Copyright (c) 2013 Johannes Rosenberger <jo.rosenberger at gmx-topmail.de>
+Copyright (c) 2015 Johannes Rosenberger <jo.rosenberger at gmx-topmail.de>
 
 This code is released under a BSD Style License.
 
