@@ -56,8 +56,9 @@ CMD=${SESS_STR##*:}
 export SCDM_SPAWN=$$
 clear
 if [ "${TYPE/X/x}" = x ]; then
-	#cd $(dirname $0)
-	exec startx $PWD/$0 xlaunch "$CMD" -- "${XSERVER_ARGS[@]}" $VT > /dev/null 2>&1
+	cd $(dirname $0)
+	exec startx $PWD/$(basename $0) xlaunch "$CMD" -- "${XSERVER_ARGS[@]}" $VT > /dev/null 2>&1
 else
-	exec ${SESSION[cmd]}
+	cd $HOME
+	exec $CMD
 fi
