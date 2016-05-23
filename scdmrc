@@ -1,5 +1,16 @@
 #!/bin/bash
 
+#############################################################################
+#
+# Format:
+#
+# SESSIONS=( '<name1>:<flag1>:<command1>' '<name2>:<flag2>:<command2>'... )
+# <nameN>: the name to be displayed in the session chooser
+# <flagN>: either X (X session) or C (console session)
+# <commandN>: command to execute, e.g. window manager
+#
+#############################################################################
+
 
 SESSIONS=(
 	'XMonad:X:xmonad'
