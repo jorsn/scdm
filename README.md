@@ -1,13 +1,18 @@
 scdm — The Simple Console Display Manager
-=======================================
+==========================================
 
-**scdm** is a console display manager a bit like [CDM] but simpler.
-It can be used instead of DM's like xdm, kdm etc.
+**scdm** is a login manager for the console, a bit like
+[CDM] but simpler. It can be used instead of DM's like xdm, kdm etc. to
+choose and start terminal or X11 sessions.
 
 [CDM]: https://github.com/ghost1227/cdm
 
-Invocation
-----------------
+
+Configuration & Invocation
+---------------------------
+
+The configuration is almost self-explaining. It is documented in
+the example scdmrc.
 
 To run **scdm**, use
 
@@ -24,9 +29,18 @@ To autostart **scdm** when you log in your account, copy the content of
 `/usr/share/doc/scdm/profile.sh` to the tail of your shell profile (`~/.profile`,
 etc.) or copy the file to `/etc/profile.d/scdm.sh`.
 
+Dependencies
+-------------
+
+**scdm** depends on
+
+* >= `bash(1)`-4
+* `tty(1)` from the coreutils
+* and `startx(1)` for X login.
+
 
 Copyright
------------
+----------
 
 Copyright (c) 2015 Johannes Rosenberger <jo.rosenberger at gmx-topmail.de>
 
