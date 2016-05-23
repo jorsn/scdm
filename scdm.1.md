@@ -1,6 +1,6 @@
-% scdm(1) scdm v1.1.1 | General Commands Manual
-% Copyright (c) 2015 Johannes Rosenberger <jo.rosenberger@gmx-topmail.de>. This program is licensed under a BSD style license
-% 2015-06-10
+% scdm(1) scdm v1.1.2 | General Commands Manual
+% Copyright (c) 2013--2016 Johannes Rosenberger <jo.rosenberger@gmx-topmail.de>. This program is licensed under a BSD style license
+% 2016-05-23
 
 NAME
 =============
@@ -17,12 +17,13 @@ scdm [*rcfile*]
 DESCRIPTION
 =============
 
-**scdm** is a simple console display manager a bit like [CDM] but simpler:
-It has no ConsoleKit support and no dialog interface.
-It can be used instead of DM's like xdm, kdm etc.
-scdm is automatically launched if you login in a getty by its start script in /etc/profile.d,
-displays a list of sessions in a bash select loop and starts the specified
-session.
+**scdm** is a login manager for the console - a bit like
+[CDM] but simpler: It has no ConsoleKit support and no dialog(1) interface.
+It can be used instead of DM's like xdm, kdm etc. to choose and start
+terminal or X11 sessions.
+
+For **scdm** to be automatically launched on tty logins simply copy
+*/usr/local/share/scdm/profile.sh* to */etc/profile.d/scdm.sh*.
 
 
 FILES
@@ -32,11 +33,13 @@ FILES
 | *~/.scdmrc*
 | */etc/scdmrc*
 |
-|       Configuration files. Evaluated in this order.
+|       Configuration files. Evaluated in this order. For a documented example
+|       consult the example file (*/etc/scdmrc*).
 
 | */etc/profile.d/scdm.sh*
+| */usr/local/share/scdm/profile.sh*
 |
-|       Launcher script.
+|       Launcher script and example.
 
 | *~/.xprofile*
 | */etc/xprofile*
