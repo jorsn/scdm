@@ -8,6 +8,20 @@ trysource() {
 	test -f "$1" -a -r "$1" && source "$1"
 }
 
+printsessions() {
+	local i=1
+	OLDIFS="$IFS"
+	eval IFS="$(printf "'\n'")"
+	echo ''
+	for sess in $SESSIONS
+	do
+		printf '\t%*u)  %s\n' ${#SESS_NUM} $i "${sess%%:*}"
+		let i++
+	done
+	echo ''
+	IFS="$OLDIFS"
+}
+
 if [ "$1" ]; then
 	if [ "$1" = xlaunch ]; then
 		command="$2"
@@ -32,14 +46,27 @@ SESS_NUM="$(echo "$SESSIONS" | wc -l)"
 LINE=--------------------------------------------------------------------------------
 echo -e "\n$(basename $0) $VERSION\n$LINE\nSelect a session:\n" \
 
-select session in "${SESS_NAMES[@]}"; do
-	if [ -z "$session" -o $REPLY -gt $SESS_NUM ] 2> /dev/null || [ $? = 2 ]; then
-		echo -e "\nYou must specify a number between 1 and $SESS_NUM!\n" >&2
+printsessions
+
+i=0
+while true
+do
+	if [ $i -ge 7 ]
+	then
+		printsessions
+		i=0
 	else
+		let i++
+	fi
+	printf '%s ' "${PS3:=>}"
+	read n
+	if [ -n "$n" -a $n -ge 1 -a $n -le $SESS_NUM ] 2> /dev/null
+	then
 		break
+	else
+		printf "\nYou must specify a number between 1 and %s!\n\n" "$SESS_NUM" >&2
 	fi
 done
-unset session
 
 SESSION="$(echo "$SESSIONS" | sed -n "${n}p")"
 
