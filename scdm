@@ -64,7 +64,7 @@ do
 	then
 		break
 	else
-		printf "\nYou must specify a number between 1 and %s!\n\n" "$SESS_NUM" >&2
+		printf "You must specify a number between 1 and %s!\n" "$SESS_NUM" >&2
 	fi
 done
 
@@ -76,7 +76,7 @@ CMD=${SESSION##*:}
 
 export SCDM_SPAWN=$$
 clear
-printf '\nStarting %s...\n' "${SESSION%%:*}"
+printf 'Starting %s...\n' "${SESSION%%:*}"
 if [ "${TYPE/X/x}" = x ]
 then
 	cd $(dirname $0)
