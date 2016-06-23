@@ -1,8 +1,9 @@
 #!/bin/sh
 
-if [[ "$EUID" != 0 ]]; then
-	if [[ "$(tty)" == /dev/tty* ]]; then
-		[[ -n "$SCDM_SPAWN" ]] && return
-		[[ -z "$SSH_TTY" ]] && exec scdm
-	fi
-fi
+scdm_tty="$(tty)"
+
+test "$EUID" != 0 \
+	-a "${scdm_tty:0:8}" = /dev/tty \
+	-a -z "$SCDM_SPAWN" \
+	-a -z "$SSH_TTY" \
+	&& exec scdm
