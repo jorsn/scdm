@@ -44,7 +44,7 @@ SESSIONS="$(printf '%s\n%s\n' "$SESSIONS" "Exit:C:true" | sed -e '/^\s*$/d' -e '
 SESS_NUM="$(echo "$SESSIONS" | wc -l)"
 
 LINE=--------------------------------------------------------------------------------
-echo -e "\n$(basename $0) $VERSION\n$LINE\nSelect a session:\n" \
+printf "\n%s %s\n%s\nSelect a session:\n" "$(basename $0)" "$VERSION" "$LINE"
 
 printsessions
 
@@ -76,6 +76,7 @@ CMD=${SESSION##*:}
 
 export SCDM_SPAWN=$$
 clear
+printf '\nStarting %s...\n' "${SESSION%%:*}"
 if [ "${TYPE/X/x}" = x ]
 then
 	cd $(dirname $0)
