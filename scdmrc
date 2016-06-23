@@ -1,10 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
 #############################################################################
 #
 # Format:
 #
-# SESSIONS=( '<name1>:<flag1>:<command1>' '<name2>:<flag2>:<command2>'... )
+# SESSIONS="<name1>:<flag1>:<command1> \n <name2>:<flag2>:<command2> \n ..."
+#     (separator = "\n")
 # <nameN>: the name to be displayed in the session chooser
 # <flagN>: either X (X session) or C (console session)
 # <commandN>: command to execute, e.g. window manager
@@ -12,19 +13,19 @@
 #############################################################################
 
 
-SESSIONS=(
-	'XMonad:X:xmonad'
-	'dwm:X:dwm'
-	'i3:X:i3'
-	'wmii:X:wmii'
-	'Fluxbox:X:startfluxbox'
-	'TMux:C:tmux'
-	'Screen:C:screen'
-	'Console:C:bash --login'
-	'Poweroff:C:sudo shutdown -hP now'
-	'Reboot:C:sudo shutdown -r now'
-	'Suspend to RAM:C:sudo pm-suspend'
-	'Hibernate (Suspend to disk):C:sudo pm-hibernate'
-	)
+SESSIONS="
+	XMonad:X:xmonad
+	dwm:X:dwm
+	i3:X:i3
+	wmii:X:wmii
+	Fluxbox:X:startfluxbox
+	TMux:C:tmux
+	Screen:C:screen
+	Console:C:bash --login
+	Poweroff:C:sudo shutdown -hP now
+	Reboot:C:sudo shutdown -r now
+	Suspend to RAM:C:sudo pm-suspend
+	Hibernate (Suspend to disk):C:sudo pm-hibernate
+	"
 
-XSERVER_ARGS=(-nolisten tcp)
+XSERVER_ARGS='-nolisten tcp'

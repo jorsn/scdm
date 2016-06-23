@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-VERSION=v1.1
+VERSION=v2.0
 
 VT=$(tty | sed 's/^.*tty/vt/g')
 
@@ -26,13 +26,8 @@ if [ ! "$1" ]; then
 		{ echo "ERROR: no config file!"; exit 1; }
 fi
 
-SESSIONS[${#SESSIONS[@]}]="Exit:C:true"
-SESS_NUM=${#SESSIONS[@]}
-
-for i in ${!SESSIONS[@]}; do
-	SESS_NAMES[$i]=${SESSIONS[$i]%%:*}
-done
-
+SESSIONS="$(printf '%s\n%s\n' "$SESSIONS" "Exit:C:true" | sed -e '/^\s*$/d' -e 's/^\s*//')"
+SESS_NUM="$(echo "$SESSIONS" | wc -l)"
 
 LINE=--------------------------------------------------------------------------------
 echo -e "\n$(basename $0) $VERSION\n$LINE\nSelect a session:\n" \
@@ -46,18 +41,18 @@ select session in "${SESS_NAMES[@]}"; do
 done
 unset session
 
-SESS_STR=${SESSIONS[$[REPLY-1]]}
+SESSION="$(echo "$SESSIONS" | sed -n "${n}p")"
 
-TYPE=${SESS_STR#*:}
+TYPE=${SESSION#*:}
 TYPE=${TYPE%:*}
-CMD=${SESS_STR##*:}
+CMD=${SESSION##*:}
 
-#echo -e "\nStarting ${SESSION[name]}..."
 export SCDM_SPAWN=$$
 clear
-if [ "${TYPE/X/x}" = x ]; then
+if [ "${TYPE/X/x}" = x ]
+then
 	cd $(dirname $0)
-	exec startx $PWD/$(basename $0) xlaunch "$CMD" -- "${XSERVER_ARGS[@]}" $VT > /dev/null 2>&1
+	exec startx $PWD/$(basename $0) xlaunch "$CMD" -- "$XSERVER_ARGS" $VT > /dev/null 2>&1
 else
 	cd $HOME
 	exec $CMD
