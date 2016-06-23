@@ -22,8 +22,8 @@ To run **scdm**, use
 existing one:
 
     <rcfile specified on command line>
-    $HOME/.cdmrc
-    /etc/cdmrc
+    $HOME/.scdmrc
+    /etc/scdmrc
 
 To autostart **scdm** when you log in your account, copy the content of
 `/usr/share/doc/scdm/profile.sh` to the tail of your shell profile (`~/.profile`,
