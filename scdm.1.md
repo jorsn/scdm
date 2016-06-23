@@ -1,4 +1,4 @@
-% scdm(1) scdm v1.1.2 | General Commands Manual
+% scdm(1) scdm v2.0 | General Commands Manual
 % Copyright (c) 2013--2016 Johannes Rosenberger <jo.rosenberger@gmx-topmail.de>. This program is licensed under a BSD style license
 % 2016-05-23
 
