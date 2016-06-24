@@ -1,50 +1,57 @@
 #!/bin/sh
 
+SELF="$(basename "$0")"
+
 VERSION=v2.0
 
-VT=$(tty | sed 's/^.*tty/vt/g')
+VT="$(tty | sed 's/^.*tty\([0-9]\+\)$/vt\1/g')"
+
+fail() {
+	fmt="$1"
+	shift
+	printf "\n%s$fmt\n\n" "$SELF: ERROR: " "$@" >&2
+	exec "$(sed -n "s/^$USER:.\+://gp" /etc/passwd)"
+}
 
 trysource() {
-	test -f "$1" -a -r "$1" && source "$1"
+#shellcheck source=./scdmrc
+	test -f "$1" -a -r "$1" && . "$1"
 }
 
 printsessions() {
-	local i=1
-	OLDIFS="$IFS"
-	eval IFS="$(printf "'\n'")"
-	echo ''
-	for sess in $SESSIONS
-	do
-		printf '\t%*u)  %s\n' ${#SESS_NUM} $i "${sess%%:*}"
-		let i++
-	done
-	echo ''
-	IFS="$OLDIFS"
+	echo "$PRINTSESSIONS"
 }
 
-if [ "$1" ]; then
+if [ -n "$1" ]; then
 	if [ "$1" = xlaunch ]; then
 		command="$2"
-		cd $HOME
-		trysource ./.xprofile || trysource /etc/xprofile
+#shellcheck disable=SC2164
+# disable warning about cd failure
+		cd "$HOME"
+		trysource "$HOME/.xprofile" || trysource /etc/xprofile
 		$command
-		cd $HOME
-		trysource ./.xlogout || trysource /etc/xlogout
+#shellcheck disable=SC2164
+		cd "$HOME"
+		trysource "$HOME/.xlogout" || trysource /etc/xlogout
 		exit
 	else
-		trysource $1 || shift
+		#TODO
+		trysource "$1" || shift
 	fi
 fi
-if [ ! "$1" ]; then
-	trysource $HOME/.scdmrc || trysource /etc/scdmrc || \
-		{ echo "ERROR: no config file!"; exit 1; }
+if [ -z "$1" ]; then
+	trysource "$HOME/.scdmrc" || trysource /etc/scdmrc || \
+		fail "no config file!"
 fi
 
 SESSIONS="$(printf '%s\n%s\n' "$SESSIONS" "Exit:C:true" | sed -e '/^\s*$/d' -e 's/^\s*//')"
 SESS_NUM="$(echo "$SESSIONS" | wc -l)"
+PRINTSESSIONS="$(echo ''; \
+	echo "$SESSIONS" | awk -F : "{printf \"%${SESS_NUM}i)  %-s\n\",NR,\$1}"; \
+	echo ' ')"
 
 LINE=--------------------------------------------------------------------------------
-printf "\n%s %s\n%s\nSelect a session:\n" "$(basename $0)" "$VERSION" "$LINE"
+printf "\n%s %s\n%s\nSelect a session:\n" "$SELF" "$VERSION" "$LINE"
 
 printsessions
 
@@ -56,11 +63,11 @@ do
 		printsessions
 		i=0
 	else
-		let i++
+		i=$((i+1))
 	fi
 	printf '%s ' "${PS3:=>}"
-	read n
-	if [ -n "$n" -a $n -ge 1 -a $n -le $SESS_NUM ] 2> /dev/null
+	read -r n
+	if [ -n "$n" ] && [ 1 -le "$n" ] && [ "$n" -le "$SESS_NUM" ]
 	then
 		break
 	else
@@ -70,18 +77,21 @@ done
 
 SESSION="$(echo "$SESSIONS" | sed -n "${n}p")"
 
-TYPE=${SESSION#*:}
-TYPE=${TYPE%:*}
-CMD=${SESSION##*:}
+TYPE="${SESSION#*:}"
+TYPE="${TYPE%:*}"
+CMD="${SESSION##*:}"
 
 export SCDM_SPAWN=$$
 clear
 printf 'Starting %s...\n' "${SESSION%%:*}"
-if [ "${TYPE/X/x}" = x ]
+if [ "$TYPE" = X ] || [ "$TYPE" = x ]
 then
-	cd $(dirname $0)
-	exec startx $PWD/$(basename $0) xlaunch "$CMD" -- "$XSERVER_ARGS" $VT > /dev/null 2>&1
+	dirname="$(dirname "$0")"
+	cd "$dirname" || fail 'could not cd to: %s' "$dirname"
+	exec startx "$PWD/$SELF" xlaunch "$CMD" -- "$XSERVER_ARGS" "$VT" > /dev/null 2>&1
 else
-	cd $HOME
+	cd "$HOME" || fail 'could not cd to: %s' "$HOME"
+#shellcheck disable=SC2086
+# do not complain about missing quotes
 	exec $CMD
 fi
