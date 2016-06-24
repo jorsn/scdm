@@ -44,7 +44,19 @@ if [ -z "$1" ]; then
 		fail "no config file!"
 fi
 
-SESSIONS="$(printf '%s\n%s\n' "$SESSIONS" "Exit:C:true" | sed -e '/^\s*$/d' -e 's/^\s*//')"
+SESSIONS="$(printf '%s\n%s\n' "$SESSIONS" "Exit:C:true" \
+	     | sed -n -e '/^\s*$/d' -e 's/^\s*//g' \
+	              -e '/^\s*[^:]\+:[XxCc]:[^:]\+\s*$/{p;d}' -e 's/^/\t  =>\t/gp')"
+
+# check for correctness of SESSIONS
+if echo "$SESSIONS" | grep -q '^\s\+=>\s\+'
+then
+	fail 'configuration corrupt:\n\tin SESSION="\n%s\n\t\t"' \
+		"$(echo "$SESSIONS" | sed -e '/^\s\+=>\t/{p;d}' -e 's/^/\t\t/g')"
+fi
+
+
+export SESSIONS
 SESS_NUM="$(echo "$SESSIONS" | wc -l)"
 PRINTSESSIONS="$(echo ''; \
 	echo "$SESSIONS" | awk -F : "{printf \"%${SESS_NUM}i)  %-s\n\",NR,\$1}"; \
