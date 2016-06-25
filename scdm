@@ -13,6 +13,12 @@ fail() {
 	exec "$(sed -n "s/^$USER:.\+://gp" /etc/passwd)"
 }
 
+usage() {
+	echo "Usage: $(basename "$0") [rcfile]" >&2
+	exit "$1"
+}
+
+
 trysource() {
 #shellcheck source=./scdmrc
 	test -f "$1" -a -r "$1" && . "$1"
@@ -23,7 +29,8 @@ printsessions() {
 }
 
 if [ -n "$1" ]; then
-	if [ "$1" = xlaunch ]; then
+	case "$1" in
+	xlaunch )
 		command="$2"
 #shellcheck disable=SC2164
 # disable warning about cd failure
@@ -34,10 +41,15 @@ if [ -n "$1" ]; then
 		cd "$HOME"
 		trysource "$HOME/.xlogout" || trysource /etc/xlogout
 		exit
-	else
-		#TODO
+		;;
+	-h | --help )
+		usage 0
+		;;
+	* )
+		test -n "$2" && usage 1
 		trysource "$1" || shift
-	fi
+		;;
+	esac
 fi
 if [ -z "$1" ]; then
 	trysource "$HOME/.scdmrc" || trysource /etc/scdmrc || \
