@@ -1,5 +1,30 @@
 #!/bin/sh
 
+###### Start X11 Session? ######
+
+trysource() {
+#shellcheck source=./scdmrc
+	test -f "$1" -a -r "$1" && . "$1"
+}
+
+if [ -n "${COMMAND}" ]
+then
+	comm="$COMMAND"
+	unset COMMAND
+#shellcheck disable=SC2164
+# disable warning about cd failure
+	cd "$HOME"
+        trysource "$HOME/.xprofile" || trysource /etc/xprofile
+        $comm
+        #shellcheck disable=SC2164
+        cd "$HOME"
+        trysource "$HOME/.xlogout" || trysource /etc/xlogout
+	exit
+fi
+
+
+###### The real program ######
+
 SELF="$(basename "$0")"
 
 VERSION=v2.0
@@ -18,30 +43,9 @@ usage() {
 	exit "$1"
 }
 
-
-trysource() {
-#shellcheck source=./scdmrc
-	test -f "$1" -a -r "$1" && . "$1"
-}
-
 printsessions() {
 	echo "$PRINTSESSIONS"
 }
-
-if [ -n "${COMMAND}" ]
-then
-	comm="$COMMAND"
-	unset COMMAND
-#shellcheck disable=SC2164
-# disable warning about cd failure
-	cd "$HOME"
-	trysource "$HOME/.xprofile" || trysource /etc/xprofile
-	$comm
-#shellcheck disable=SC2164
-	cd "$HOME"
-	trysource "$HOME/.xlogout" || trysource /etc/xlogout
-	exit
-fi
 
 if [ $# -gt 1 ]
 then
@@ -74,7 +78,6 @@ then
 fi
 
 
-export SESSIONS
 SESS_NUM="$(echo "$SESSIONS" | wc -l)"
 PRINTSESSIONS="$(echo ''; \
 	echo "$SESSIONS" | awk -F : "{printf \"%${SESS_NUM}i)  %-s\n\",NR,\$1}"; \
