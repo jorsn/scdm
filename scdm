@@ -77,14 +77,16 @@ then
 		"$(echo "$SESSIONS" | sed -e '/^\s\+=>\t/{p;d}' -e 's/^/\t\t/g')"
 fi
 
-
 SESS_NUM="$(echo "$SESSIONS" | wc -l)"
-PRINTSESSIONS="$(echo ''; \
-	echo "$SESSIONS" | awk -F : "{printf \"%${SESS_NUM}i)  %-s\n\",NR,\$1}"; \
-	echo ' ')"
+
+PRINTSESSIONS="$(echo "$SESSIONS" | awk -F : "{printf \"%$((SESS_NUM%10 + 1))i)  %-s\n\",NR,\$1}")"
+maxw="$(printsessions | wc -L)"
+PRINTSESSIONS="
+$(printsessions | pr --columns=$((80/maxw)) --omit-header --width=80)
+"
 
 LINE=--------------------------------------------------------------------------------
-printf "\n%s %s\n%s\nSelect a session:\n" "$SELF" "$VERSION" "$LINE"
+printf "\n%39s %-39s\n%s\n\nSelect a session:\n" "$SELF" "$VERSION" "$LINE"
 
 printsessions
 
