@@ -39,7 +39,7 @@ for X11 logins, `startx(1)`.
 Copyright
 ----------
 
-Copyright (c) 2015 Johannes Rosenberger <jo.rosenberger at gmx-topmail.de>
+Copyright (c) 2013--2016 Johannes Rosenberger
 
 This code is released under a BSD Style License.
 
