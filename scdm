@@ -34,7 +34,8 @@ VT="$(tty | sed 's/^.*tty\([0-9]\+\)$/vt\1/g')"
 fail() {
 	fmt="$1"
 	shift
-	printf "\n%s$fmt\n\n" "$SELF: ERROR: " "$@" >&2
+	printf "\n%s$fmt\n" "$SELF: ERROR: " "$@" >&2
+	printf 'Falling back to plain console session.\n\n' >&2
 	exec "$(sed -n "s/^$USER:.\+://gp" /etc/passwd)"
 }
 
