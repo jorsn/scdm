@@ -31,11 +31,21 @@ VERSION=v2.0
 
 VT="$(tty | sed 's/^.*tty\([0-9]\+\)$/vt\1/g')"
 
-fail() {
-	fmt="$1"
+warn() {
+# !!! WARNING: don't ever feed user-supplied args into this function !!!
+	fmt="${1%\\n}\\n"
 	shift
-	printf "\n%s$fmt\n" "$SELF: ERROR: " "$@" >&2
-	printf 'Falling back to plain console session.\n\n' >&2
+# disable warning about variables in format string
+# shellcheck disable=SC2059
+	printf "$fmt" "$@" >&2
+}
+
+fail() {
+	fmt="%s: ERROR: $1"
+	shift
+	warn "$fmt" "$SELF" "$@"
+	warn 'Falling back to plain console session.'
+	warn ''
 	exec "$(sed -n "s/^$USER:.\+://gp" /etc/passwd)"
 }
 
@@ -63,7 +73,7 @@ esac
 if [ $# -gt 1 ]; then
 	usage 1
 elif [ $# -eq 1 ] && ! trysource "$1"; then
-	fail "cannot source config file: '$1'"
+	fail 'cannot source config file:%' "$1"
 fi
 
 if [ -z "$SESSIONS" ]; then
