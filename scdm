@@ -63,10 +63,10 @@ esac
 if [ $# -gt 1 ]; then
 	usage 1
 elif [ $# -eq 1 ] && ! trysource "$1"; then
-	unset SESSIONS XSERVER_ARGS
+	fail "cannot source config file: '$1'"
 fi
 
-if [ -z "$1" ]; then
+if [ -z "$SESSIONS" ]; then
 	trysource "$HOME/.scdmrc" || trysource /etc/scdmrc || \
 		fail "no config file!"
 fi
