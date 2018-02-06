@@ -50,7 +50,7 @@ fail() {
 }
 
 usage() {
-	echo "Usage: $(basename "$0") [rcfile]" >&2
+	warn 'Usage: %s [rcfile]' "$(basename "$0")"
 	exit "$1"
 }
 
@@ -121,7 +121,7 @@ do
 	then
 		break
 	else
-		printf "You must specify a number between 1 and %s!\n" "$SESS_NUM" >&2
+		warn 'You must specify a number between 1 and %s!' "$SESS_NUM"
 	fi
 done
 
