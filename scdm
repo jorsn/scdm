@@ -48,20 +48,24 @@ printsessions() {
 	echo "$PRINTSESSIONS"
 }
 
-if [ $# -gt 1 ]
-then
-	usage 1
-elif [ $# -eq 1 ]
-then
-	if [ "$1" = -h ] || [ "$1" = --help ]
-	then
+case "$1" in
+	-h|--help )
 		usage 0
-	elif ! trysource "$1"
-	then
-		shift
-		unset SESSIONS XSERVER_ARGS
+		;;
+	-t|--tty )
+		if [ "$2" -eq "$VT" ] && [ "$DISPLAY" ] && [ "$TERM" != linux ]; then
+			fail 'cannot open session on current terminal.'
 	fi
+	VT="$2"
+	shift; shift
+	;;
+esac
+if [ $# -gt 1 ]; then
+	usage 1
+elif [ $# -eq 1 ] && ! trysource "$1"; then
+	unset SESSIONS XSERVER_ARGS
 fi
+
 if [ -z "$1" ]; then
 	trysource "$HOME/.scdmrc" || trysource /etc/scdmrc || \
 		fail "no config file!"
