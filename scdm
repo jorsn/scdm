@@ -144,3 +144,5 @@ else
 # do not complain about missing quotes
 	exec $COMMAND
 fi
+
+# vim: noexpandtab sw=4 ts=4
