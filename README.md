@@ -1,6 +1,5 @@
 scdm — The Simple Console Display Manager
 ==========================================
-
 **scdm** is a login manager for the console, a bit like
 [CDM] but simpler. It can be used instead of DM's like xdm, kdm etc. to
 choose and start terminal or X11 sessions.
@@ -39,7 +38,7 @@ for X11 logins, `startx(1)`.
 Copyright
 ----------
 
-Copyright (c) 2013--2016 Johannes Rosenberger
+Copyright (c) 2013--2018 Johannes Rosenberger
 
 This code is released under a BSD Style License.
 

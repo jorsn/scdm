@@ -3,8 +3,9 @@
 ###### Start X11 Session? ######
 
 trysource() {
+	[ "$1" = "${1#/}" ] && f="./$1" || f="$1"
 #shellcheck source=./scdmrc
-	test -f "$1" -a -r "$1" && . "$1"
+	[ -f "$f" ] && [ -r "$f" ] && . "$f"
 }
 
 if [ -n "${COMMAND}" ]
@@ -29,7 +30,7 @@ SELF="$(basename "$0")"
 
 VERSION=v2.0
 
-VT="$(tty | sed 's/^.*tty\([0-9]\+\)$/vt\1/g')"
+VT="vt$(fgconsole)"
 
 warn() {
 # !!! WARNING: don't ever feed user-supplied args into this function !!!
@@ -46,7 +47,7 @@ fail() {
 	warn "$fmt" "$SELF" "$@"
 	warn 'Falling back to plain console session.'
 	warn ''
-	exec "$(sed -n "s/^$USER:.\+://gp" /etc/passwd)"
+	exec "$(sed -n "s/^$USER:.\\+://gp" /etc/passwd)"
 }
 
 usage() {
@@ -63,7 +64,8 @@ case "$1" in
 		usage 0
 		;;
 	-t|--tty )
-		if [ "$2" -eq "$VT" ] && [ "$DISPLAY" ] && [ "$TERM" != linux ]; then
+		test "$2" || usage 1
+		if [ vt"$2" = "$VT" ] && [ "$DISPLAY" ] && [ "$TERM" != linux ]; then
 			fail 'cannot open session on current terminal.'
 	fi
 	VT="$2"
@@ -73,7 +75,7 @@ esac
 if [ $# -gt 1 ]; then
 	usage 1
 elif [ $# -eq 1 ] && ! trysource "$1"; then
-	fail 'cannot source config file:%' "$1"
+	fail 'cannot source config file: %s' "$1"
 fi
 
 if [ -z "$SESSIONS" ]; then
@@ -94,14 +96,14 @@ fi
 
 SESS_NUM="$(echo "$SESSIONS" | wc -l)"
 
-PRINTSESSIONS="$(echo "$SESSIONS" | awk -F : "{printf \"%$((SESS_NUM%10 + 1))i)  %-s\n\",NR,\$1}")"
+PRINTSESSIONS="$(echo "$SESSIONS" | awk -F : "{printf \"%$((SESS_NUM%10 + 1))i)  %-s\\n\",NR,\$1}")"
 maxw="$(printsessions | wc -L)"
 PRINTSESSIONS="
 $(printsessions | pr --columns=$((80/maxw)) --omit-header --width=80)
 "
 
 LINE=--------------------------------------------------------------------------------
-printf "\n%39s %-39s\n%s\n\nSelect a session:\n" "$SELF" "$VERSION" "$LINE"
+printf '\n%39s %-39s\n%s\n\nSelect a session:\n' "$SELF" "$VERSION" "$LINE"
 
 printsessions
 
