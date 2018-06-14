@@ -1,6 +1,6 @@
 % scdm(1) scdm v2.0 | General Commands Manual
-% Copyright (c) 2013--2016 Johannes Rosenberger <jo.rosenberger@gmx-topmail.de>. This program is licensed under a BSD style license
-% 2016-05-23
+% Copyright (c) 2013--2018 Johannes Rosenberger <johannes.rosenberger@jorsn.eu>. This program is licensed under a BSD style 3-clause license.
+% 2018-06-14
 
 NAME
 =============
