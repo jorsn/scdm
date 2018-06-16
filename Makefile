@@ -4,16 +4,13 @@ docdir	:= $(prefix)/share/doc/scdm
 mandir	:= $(prefix)/share/man/man1
 etcdir	:= /etc
 
-.PHONY: all man install
+.PHONY: all install
 
-all: man
-
-man: scdm.1
-scdm.1: scdm.1.md
-	pandoc -so $@ $<
+all:
+	@echo "make targets: install uninstall"
 
 install: scdm scdmrc README.md LICENSE profile.sh scdm.1
-	install -d $(bindir) $(docdir) $(etcdir)
+	install -d $(bindir) $(docdir) $(etcdir) $(mandir)
 	install -Dm755 scdm $(bindir)
 	install -Dm644 scdmrc $(etcdir)
 	install -Dm644 README.md LICENSE profile.sh $(docdir)
@@ -29,6 +26,3 @@ uninstall:
 	# Ich you want it removed, please do that manually.
 	################################################################################
 	@echo ''
-
-clean: scdm.1
-	rm -f scdm.1
