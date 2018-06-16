@@ -31,7 +31,7 @@ etc.) or copy the file to `/etc/profile.d/scdm.sh`.
 Dependencies
 -------------
 
-**scdm** only depends on a posix compliant shell, the coreutils and,
+**scdm** only depends on a posix compliant shell (with utils), the coreutils and,
 for X11 logins, `startx(1)`.
 
 
