@@ -47,7 +47,7 @@ fail() {
 	warn "$fmt" "$SELF" "$@"
 	warn 'Falling back to plain console session.'
 	warn ''
-	exec "$(sed -n "s/^$USER:.\\+://gp" /etc/passwd)"
+	exec "$(grep -F "$USER:x:" /etc/passwd | cut -d: -f7)"
 }
 
 usage() {
