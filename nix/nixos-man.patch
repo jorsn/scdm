@@ -1,5 +1,3 @@
-diff --git a/scdm.1 b/scdm.1
-index cfcd9df..16a519a 100644
 --- a/scdm.1
 +++ b/scdm.1
 @@ -25,6 +25,12 @@ or
