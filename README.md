@@ -77,9 +77,15 @@ create an issue at [GitHub](https://github.com/jorsn/scdm/issues).
 Dependencies
 -------------
 
-**scdm** only depends on a posix compliant shell (with utils), the coreutils and,
-for X11 logins, `startx(1)`.
+**scdm** only depends on:
 
+* a posix compliant shell (with utils)
+* `fgconsole`, which is provided by [busybox](https://busybox.net/)
+   or the [linux keyboard tools](http://kbd-project.org/)
+* the coreutils
+* `startx(1)` if you want to start X11 sessions
+
+The first two points are fully covered by busybox.
 
 Copyright
 ----------
