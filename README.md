@@ -7,6 +7,41 @@ choose and start terminal or X11 sessions.
 [CDM]: https://github.com/ghost1227/cdm
 
 
+Installation
+------------
+
+### Nix
+
+Ad-hoc installation:
+
+    $ nix-env -if https://github.com/jorsn/scdm/archive/<tag/commit>.tar.gz
+
+For a declarative installation you can include the following line in a location
+where you define packages, e.g. in an overlay like this:
+
+```nix
+self: super:
+
+{
+    scdm = import (builtins.fetchTarball
+        https://github.com/jorsn/scdm/archive/nix.tar.gz)
+        { pkgs = super; };
+}
+```
+
+### Gentoo
+
+An ebuild is available in [this overlay](https://github.com/jorsn/jorsn-gentoo).
+
+
+### Other *nixes
+
+* Type `make install`. The default installation `prefix` is `/usr/local`.
+* Or create a package for your distribution, publish and install this
+  and tell me about it, e.g. via a pull request or just an email to
+  johannes.rosenberger (at) jorsn.eu.
+
+
 Configuration & Invocation
 ---------------------------
 
