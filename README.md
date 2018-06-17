@@ -1,5 +1,9 @@
 scdm — The Simple Console Display Manager
 ==========================================
+
+[![tests on branch master](https://img.shields.io/travis/jorsn/scdm/master.svg?label=tests%20on%20branch%20master)](https://travis-ci.org/jorsn/scdm)
+[![tests on branch dev](https://img.shields.io/travis/jorsn/scdm/dev.svg?label=tests%20on%20branch%20dev)](https://travis-ci.org/jorsn/scdm)
+
 **scdm** is a login manager for the console, a bit like
 [CDM] but simpler. It can be used instead of DM's like xdm, kdm etc. to
 choose and start terminal or X11 sessions.
