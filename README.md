@@ -26,7 +26,11 @@ existing one:
 
 To autostart **scdm** when you log in your account, copy the content of
 `/usr/share/doc/scdm/profile.sh` to the tail of your shell profile (`~/.profile`,
-etc.) or copy the file to `/etc/profile.d/scdm.sh`.
+etc.) or copy the file to `/etc/profile.d/` and make sure it is sourced after
+everything else, e.g. name the file `1000-scdm.sh` (because it uses exec).
+
+If you are using NixOS, you may want to append it to `environment.loginShellInit`
+in your `configuration.nix`.
 
 Dependencies
 -------------
