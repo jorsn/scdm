@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   name = "scdm-${version}";
   version = "2.0";
 
-  src = ./.;
+  src = ./..;
 
   patches = [ ./nixos-man.patch ];
 
