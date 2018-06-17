@@ -14,14 +14,17 @@ like xdm, kdm etc. to choose and start terminal or X11 sessions.
 For
 .Nm
 to be automatically launched on tty logins simply copy
-.Pa /usr/local/share/scdm/profile.sh
+the launcher script
+.Pq see Sx FILES
 to
-.Pa /etc/profile.d/scdm.sh
+.Pa /etc/profile.d/
 and/or make sure
 it is sourced by
 .Pa /etc/profile
 or
-.Pa ~/.*profile .
+.Pa ~/.*profile
+after everything else
+.Pq because it uses exec .
 .Sh FILES
 .Bl -item -compact
 .It
