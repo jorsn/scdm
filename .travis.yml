@@ -1,5 +1,9 @@
 language: nix
 
+branches:
+    except:
+        man-nixos
+
 script:
     - shellcheck -x scdm
     - nix build --arg pkgs 'import <nixpkgs> {}'
