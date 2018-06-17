@@ -3,8 +3,9 @@
 ###### Start X11 Session? ######
 
 trysource() {
+	[ "$1" = "${1#/}" ] && f="./$1" || f="$1"
 #shellcheck source=./scdmrc
-	test -f "$1" -a -r "$1" && . "$1"
+	[ -f "$f" ] && [ -r "$f" ] && . "$f"
 }
 
 if [ -n "${COMMAND}" ]
@@ -29,17 +30,28 @@ SELF="$(basename "$0")"
 
 VERSION=v2.0
 
-VT="$(tty | sed 's/^.*tty\([0-9]\+\)$/vt\1/g')"
+VT="vt$(fgconsole)"
+
+warn() {
+# !!! WARNING: don't ever feed user-supplied args into this function !!!
+	fmt="${1%\\n}\\n"
+	shift
+# disable warning about variables in format string
+# shellcheck disable=SC2059
+	printf "$fmt" "$@" >&2
+}
 
 fail() {
-	fmt="$1"
+	fmt="%s: ERROR: $1"
 	shift
-	printf "\n%s$fmt\n\n" "$SELF: ERROR: " "$@" >&2
-	exec "$(sed -n "s/^$USER:.\+://gp" /etc/passwd)"
+	warn "$fmt" "$SELF" "$@"
+	warn 'Falling back to plain console session.'
+	warn ''
+	exec "$SHELL"
 }
 
 usage() {
-	echo "Usage: $(basename "$0") [rcfile]" >&2
+	warn 'Usage: %s [rcfile]' "$SELF"
 	exit "$1"
 }
 
@@ -47,21 +59,26 @@ printsessions() {
 	echo "$PRINTSESSIONS"
 }
 
-if [ $# -gt 1 ]
-then
-	usage 1
-elif [ $# -eq 1 ]
-then
-	if [ "$1" = -h ] || [ "$1" = --help ]
-	then
+case "$1" in
+	-h|--help )
 		usage 0
-	elif ! trysource "$1"
-	then
-		shift
-		unset SESSIONS XSERVER_ARGS
+		;;
+	-t|--tty )
+		test "$2" || usage 1
+		if [ vt"$2" = "$VT" ] && [ "$DISPLAY" ] && [ "$TERM" != linux ]; then
+			fail 'cannot open session on current terminal.'
 	fi
+	VT="$2"
+	shift; shift
+	;;
+esac
+if [ $# -gt 1 ]; then
+	usage 1
+elif [ $# -eq 1 ] && ! trysource "$1"; then
+	fail 'cannot source config file: %s' "$1"
 fi
-if [ -z "$1" ]; then
+
+if [ -z "$SESSIONS" ]; then
 	trysource "$HOME/.scdmrc" || trysource /etc/scdmrc || \
 		fail "no config file!"
 fi
@@ -79,14 +96,14 @@ fi
 
 SESS_NUM="$(echo "$SESSIONS" | wc -l)"
 
-PRINTSESSIONS="$(echo "$SESSIONS" | awk -F : "{printf \"%$((SESS_NUM%10 + 1))i)  %-s\n\",NR,\$1}")"
+PRINTSESSIONS="$(echo "$SESSIONS" | awk -F : "{printf \"%$((SESS_NUM%10 + 1))i)  %-s\\n\",NR,\$1}")"
 maxw="$(printsessions | wc -L)"
 PRINTSESSIONS="
 $(printsessions | pr --columns=$((80/maxw)) --omit-header --width=80)
 "
 
 LINE=--------------------------------------------------------------------------------
-printf "\n%39s %-39s\n%s\n\nSelect a session:\n" "$SELF" "$VERSION" "$LINE"
+printf '\n%39s %-39s\n%s\n\nSelect a session:\n' "$SELF" "$VERSION" "$LINE"
 
 printsessions
 
@@ -106,7 +123,7 @@ do
 	then
 		break
 	else
-		printf "You must specify a number between 1 and %s!\n" "$SESS_NUM" >&2
+		warn 'You must specify a number between 1 and %s!' "$SESS_NUM"
 	fi
 done
 
@@ -129,3 +146,5 @@ else
 # do not complain about missing quotes
 	exec $COMMAND
 fi
+
+# vim: noexpandtab sw=4 ts=4

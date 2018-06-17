@@ -1,11 +1,49 @@
 scdm — The Simple Console Display Manager
 ==========================================
 
+[![tests on branch master](https://img.shields.io/travis/jorsn/scdm/master.svg?label=tests%20on%20branch%20master)](https://travis-ci.org/jorsn/scdm)
+[![tests on branch dev](https://img.shields.io/travis/jorsn/scdm/dev.svg?label=tests%20on%20branch%20dev)](https://travis-ci.org/jorsn/scdm)
+
 **scdm** is a login manager for the console, a bit like
 [CDM] but simpler. It can be used instead of DM's like xdm, kdm etc. to
 choose and start terminal or X11 sessions.
 
 [CDM]: https://github.com/ghost1227/cdm
+
+
+Installation
+------------
+
+### Nix
+
+Ad-hoc installation:
+
+    $ nix-env -if https://github.com/jorsn/scdm/archive/<tag/commit>.tar.gz
+
+For a declarative installation you can include the following line in a location
+where you define packages, e.g. in an overlay like this:
+
+```nix
+self: super:
+
+{
+    scdm = import (builtins.fetchTarball
+        https://github.com/jorsn/scdm/archive/nix.tar.gz)
+        { pkgs = super; };
+}
+```
+
+### Gentoo
+
+An ebuild is available in [this overlay](https://github.com/jorsn/jorsn-gentoo).
+
+
+### Other *nixes
+
+* Type `make install`. The default installation `prefix` is `/usr/local`.
+* Or create a package for your distribution, publish and install this
+  and tell me about it, e.g. via a pull request or just an email to
+  johannes.rosenberger (at) jorsn.eu.
 
 
 Configuration & Invocation
@@ -27,19 +65,36 @@ existing one:
 
 To autostart **scdm** when you log in your account, copy the content of
 `/usr/share/doc/scdm/profile.sh` to the tail of your shell profile (`~/.profile`,
-etc.) or copy the file to `/etc/profile.d/scdm.sh`.
+etc.) or copy the file to `/etc/profile.d/` and make sure it is sourced after
+everything else, e.g. name the file `1000-scdm.sh` (because it uses exec).
+
+If you are using NixOS, you may want to append it to `environment.loginShellInit`
+in your `configuration.nix`.
+
+
+Bugs & Enhancements
+-------------------
+
+If you encounter any bugs or have ideas for enhancements, please send me an email or
+create an issue at [GitHub](https://github.com/jorsn/scdm/issues).
 
 Dependencies
 -------------
 
-**scdm** only depends on a posix compliant shell, the coreutils and,
-for X11 logins, `startx(1)`.
+**scdm** only depends on:
 
+* a posix compliant shell (with utils)
+* `fgconsole`, which is provided by [busybox](https://busybox.net/)
+   or the [linux keyboard tools](http://kbd-project.org/)
+* the coreutils
+* `startx(1)` if you want to start X11 sessions
+
+The first two points are fully covered by busybox.
 
 Copyright
 ----------
 
-Copyright (c) 2013--2016 Johannes Rosenberger
+Copyright (c) 2013--2018 Johannes Rosenberger
 
 This code is released under a BSD Style License.
 
