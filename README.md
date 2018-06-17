@@ -67,6 +67,13 @@ everything else, e.g. name the file `1000-scdm.sh` (because it uses exec).
 If you are using NixOS, you may want to append it to `environment.loginShellInit`
 in your `configuration.nix`.
 
+
+Bugs & Enhancements
+-------------------
+
+If you encounter any bugs or have ideas for enhancements, please send me an email or
+create an issue at [GitHub](https://github.com/jorsn/scdm/issues).
+
 Dependencies
 -------------
 
