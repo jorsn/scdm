@@ -1,0 +1,5 @@
+language: nix
+
+script:
+    - shellcheck -x scdm
+    - nix build --arg pkgs 'import <nixpkgs> {}'
