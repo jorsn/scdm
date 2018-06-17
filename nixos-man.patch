@@ -1,0 +1,26 @@
+diff --git a/scdm.1 b/scdm.1
+index cfcd9df..16a519a 100644
+--- a/scdm.1
++++ b/scdm.1
+@@ -25,6 +25,12 @@ or
+ .Pa ~/.*profile
+ after everything else
+ .Pq because it uses exec .
++If you are using NixOS, you may want to
++.Em append
++it to
++.Cd environment.loginShellInit
++in your
++.Pa configuration.nix .
+ .Sh FILES
+ .Bl -item -compact
+ .It
+@@ -36,7 +42,7 @@ after everything else
+ .El
+ .D1 Configuration files. The first existing one is used. \
+ For a documented example consult the example file \
+-Pq Pa /etc/scdmrc .
++Pq Pa @etcdir@/scdmrc .
+ .Pp
+ .Bl -item -compact
+ .It
