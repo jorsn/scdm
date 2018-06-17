@@ -51,7 +51,7 @@ fail() {
 }
 
 usage() {
-	warn 'Usage: %s [rcfile]' "$(basename "$0")"
+	warn 'Usage: %s [rcfile]' "$SELF"
 	exit "$1"
 }
 
