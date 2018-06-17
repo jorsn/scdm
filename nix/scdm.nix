@@ -14,6 +14,7 @@
   gawk,
   gnugrep,
   gnused,
+  kbd,
 
   ## optionals
 
@@ -27,7 +28,7 @@
 
 let
   busyboxOr    = p: if preferBusybox then busybox else p;
-  busyboxOrGnu = if preferBusybox then [ busybox ] else [ bash gawk gnugrep gnused ];
+  busyboxOrGnu = if preferBusybox then [ busybox ] else [ bash gawk gnugrep gnused kbd ];
   runtimeDeps  = [ coreutils ] ++ busyboxOrGnu ++ lib.optional X xorg.xinit;
   sh           = busyboxOr bash;
   sed          = busyboxOr gnused;
