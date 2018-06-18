@@ -28,7 +28,7 @@ fi
 
 SELF="$(basename "$0")"
 
-VERSION=v2.0
+VERSION=v2.1
 
 VT="vt$(fgconsole)"
 

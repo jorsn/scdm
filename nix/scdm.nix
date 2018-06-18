@@ -34,7 +34,7 @@ let
   sed          = busyboxOr gnused;
 in stdenv.mkDerivation rec {
   name = "scdm-${version}";
-  version = "2.0";
+  version = "2.1";
 
   src = ./..;
 
