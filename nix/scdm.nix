@@ -38,16 +38,26 @@ in stdenv.mkDerivation rec {
 
   src = ./..;
 
-  patches = [ ./nixos-man.patch ];
-
   buildInputs = [ sh ];
 
   dontBuild = true;
 
   makeFlags = [ "prefix=$(out)" "etcdir=$(docdir)" ];
+
+  manDescNoteNixOS = ''
+    If you are using NixOS, you may want to
+    .Em append
+    it to
+    .Cd environment.loginShellInit
+    in your
+    .Pa configuration.nix .
+    .\" END DESCRIPTION'';
+
   preInstall = ''
     substituteInPlace scdm.1 --replace '/usr/local' "$out"
-    substituteInPlace scdm.1 --subst-var-by etcdir "$out/doc"
+    substituteInPlace scdm.1 --replace '.\" END DESCRIPTION' '${manDescNoteNixOS}'
+    ${sed}/bin/sed -i -e ':a' -e 'N' -e '$ba' \
+        -e 's%\(consult the example file \\\nPq Pa \)/etc\(/scdmrc .\)%\1'"$out"'/doc\2%g' scdm.1
     ${sed}/bin/sed -i '1a \export PATH="${lib.makeBinPath ([ "$out"  ] ++ runtimeDeps)}"' scdm
   '';
 
