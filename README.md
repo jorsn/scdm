@@ -10,6 +10,20 @@ choose and start terminal or X11 sessions.
 
 [CDM]: https://github.com/ghost1227/cdm
 
+I archived scdm because I don't use it anymore. Instead, I use this script to launch X sessions:
+
+```sh
+#!/bin/sh
+
+config_file="$HOME/.xprofile"
+xserver_args="${xserver_args:--nolisten tcp}"
+vt="vt$(fgconsole)"
+
+exec startx /bin/sh -- "$xserver_args" "$vt" <<EOF
+test -e '$config_file' && . '$config_file' && exec "$@"
+EOF
+```
+
 
 Installation
 ------------
